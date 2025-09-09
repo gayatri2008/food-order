@@ -7,7 +7,93 @@
     <title>Document</title>
     <link rel="stylesheet" href="allinone.css">
     <link rel="stylesheet" href="buy.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff7f0;
+      margin: 0;
+      padding: 20px;
+    }
 
+    h2 { margin-bottom: 20px; color: #ff7a00; }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .item-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .item-info img {
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+    .item-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .item-price {
+      font-size: 14px;
+      color: #666;
+      margin-top: 4px;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .quantity-controls button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 6px;
+      background: #ff7a00;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .quantity-controls button:hover {
+      background: #e66b00;
+    }
+    .quantity-controls span {
+      min-width: 24px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .delete-btn {
+      background: #ff4d4d;
+      border: none;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      color: white;
+      font-size: 16px;
+    }
+    .delete-btn:hover {
+      background: #d93636;
+    }
+    .total {
+      margin-top: 20px;
+      text-align: right;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  </style>
     <style>
         /* Reset & Base */
         * {
@@ -163,19 +249,12 @@
         </nav>
     </header>
     <div class="container">
-        <h2>Your cart</h2>
-        <table class="orders-table">
-            <tr>
-                <th>Order #</th>
-                <th>Date</th>
-                <th>Items</th>
-                <th>Total</th>
-
-                <th>Delete</th>
-            </tr>
-
-        </table>
-
+       
+  <div class="cart-container">
+    <h2>My Food Cart</h2>
+    <div id="cartItems"></div>
+    <div class="total">Total: ₹<span id="cartTotal">0</span></div>
+  </div>
         <!-- Confirmation Buttons -->
         <div id="confirmation">
             <div style="margin-bottom: 16px;">Are you sure you want to place this order?</div>
@@ -216,41 +295,91 @@
         }, 2000);
     });
 
-    function loadOrders() {
-        let orders = JSON.parse(localStorage.getItem("cart")) || [];
-        let list = document.querySelector(".orders-table");
-        if (orders.length === 0) {
-            list.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No orders found.</td></tr>";
-        } else {
-            list.innerHTML = `<tr>
-                <th>Order #</th>
-                <th>Date</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Delete</th>
-            </tr>`;
-            orders.forEach((item, index) => {
-                let row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${item.id}</td>
-                    <td>${item.date}</td>
-                    <td>${item.name}</td>
-                    <td>₹${item.price}</td>
-                    <td><button class="btn delete-btn" onclick="deleteOrder(${index})">❌ Delete</button></td>
-                `;
-                list.appendChild(row);
-            });
+
+</script>  <script>
+    function loadCart() {
+      let orders = JSON.parse(localStorage.getItem('cart')) || [];
+      let cartDiv = document.getElementById('cartItems');
+      cartDiv.innerHTML = "";
+
+      orders.forEach((item, index) => {
+        // Ensure quantity field exists
+        if (!item.quantity) item.quantity = 1;
+
+        let div = document.createElement('div');
+        div.className = "cart-item";
+        div.setAttribute("data-index", index);
+        div.setAttribute("data-price", item.price);
+
+        div.innerHTML = `
+          <div class="item-info">
+            <img src="${item.image}" alt="${item.name}">
+            <div>
+              <div class="item-title">${item.name}</div>
+              <div class="item-price">₹${item.price} • ${item.date}</div>
+            </div>
+          </div>
+          <div class="quantity-controls">
+            <button class="decrease"><i class="fa fa-minus"></i></button>
+            <span class="quantity">${item.quantity}</span>
+            <button class="increase"><i class="fa fa-plus"></i></button>
+          </div>
+        `;
+        cartDiv.appendChild(div);
+      });
+      updateTotal();
+      attachEvents();
+    }
+
+    function updateTotal() {
+      let total = 0;
+      document.querySelectorAll('.cart-item').forEach(item => {
+        const price = parseInt(item.getAttribute('data-price'));
+        const qty = parseInt(item.querySelector('.quantity').textContent);
+        total += price * qty;
+      });
+      document.getElementById('cartTotal').textContent = total;
+    }
+
+    function attachEvents() {
+      document.querySelectorAll('.increase').forEach(btn => {
+        btn.onclick = function() {
+          const itemDiv = this.closest('.cart-item');
+          const qtyEl = itemDiv.querySelector('.quantity');
+          qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
+          saveQuantities();
+          updateTotal();
+        };
+      });
+
+      document.querySelectorAll('.decrease').forEach(btn => {
+        btn.onclick = function() {
+          const itemDiv = this.closest('.cart-item');
+          const qtyEl = itemDiv.querySelector('.quantity');
+          let qty = parseInt(qtyEl.textContent);
+          if(qty > 1) {
+            qtyEl.textContent = qty - 1;
+            saveQuantities();
+            updateTotal();
+          }
+        };
+      });
+    }
+
+    function saveQuantities() {
+      let orders = JSON.parse(localStorage.getItem('cart')) || [];
+      document.querySelectorAll('.cart-item').forEach(itemDiv => {
+        const index = itemDiv.getAttribute('data-index');
+        const qty = parseInt(itemDiv.querySelector('.quantity').textContent);
+        if (orders[index]) {
+          orders[index].quantity = qty;
         }
+      });
+      localStorage.setItem('orders', JSON.stringify(orders));
     }
 
-    function deleteOrder(index) {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        cart.splice(index, 1); // remove item by index
-        localStorage.setItem("cart", JSON.stringify(cart));
-        loadOrders(); // refresh list
-    }
-
-    document.addEventListener("DOMContentLoaded", loadOrders);
-</script>
+    // Load cart on page start
+    loadCart();
+  </script>
 </body>
 </html>

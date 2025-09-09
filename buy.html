@@ -101,7 +101,8 @@
           id:product.id,
           date: new Date().toLocaleDateString(),
           name: product.name,
-          price: product.price
+          price: product.price,
+          image:product.img
         });
         localStorage.setItem("cart", JSON.stringify(cart));
 
