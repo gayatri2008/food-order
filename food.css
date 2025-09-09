@@ -1,0 +1,328 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+}
+
+body {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: white;
+}
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    font-size: 12px;
+}
+.tracker-card {
+  width: 300px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff8e1;
+  border: 2px solid #ffc107;
+  border-radius: 10px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.hidden {
+  display: none;
+}
+.add-to-cart {
+  background-color: #ff6f00;   /* Orange button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+/* Wrapper for logo */
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+/* Logo image itself */
+.logo img {
+  height: 60px;     /* Adjust as needed */
+  width: auto;      /* Maintains aspect ratio */
+  object-fit: contain;
+}
+
+.add-to-cart:hover {
+  background-color: #e65100;   /* Darker orange on hover */
+}
+
+.tracker-bar {
+  width: 100%;
+  background: #eee;
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  width: 0%;
+  background-color: #4caf50;
+  animation: moveProgress 5s linear forwards;
+}
+
+@keyframes moveProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+.icon-item img {
+    width: 24px;
+    height: 24px;
+}
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 10px;
+    gap: 50px;
+    margin-top: -150px;
+    margin-left: 331px;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    background-image: url('https://images.unsplash.com/photo-1600891965054-04f58c37d47f');
+    background-size: cover;
+    background-position: center;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-text h2 {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Offers Banner */
+.offers {
+    background: #ffe0b2;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Slider Section */
+.slider {
+    overflow: hidden;
+    margin-top: -108px;
+}
+
+figure {
+    position: relative;
+    left: 0;
+    width: 400%;
+    animation: slide 10s infinite;
+}
+
+.slide {
+    position: relative;
+    width: 25%;
+    float: left;
+}
+
+.slide h1 {
+    position: absolute;
+    font-size: 3em;
+    width: 80%;
+    text-align: center;
+    margin-top: 50px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes slide {
+    0% { left: 0%; }
+    20% { left: 0%; }
+    25% { left: -100%; }
+    45% { left: -100%; }
+    50% { left: -200%; }
+    70% { left: -200%; }
+    75% { left: -300%; }
+    95% { left: -300%; }
+    100% { left: 0%; }
+}
+
+/* Categories Section */
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.cart {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cat:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+/* Dark Mode */
+.dark-mode {
+    --bg: #121212;
+    --text: #ffffff;
+}
+
+/* Dishes Section */
+.dishes {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #fff4eb;
+}
+.search-bar {
+  text-align: center;
+  margin: 30px 0;
+}   
+
+#searchInput {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 2px solid black;
+  border-radius: 5px;
+  margin-bottom: 50px;
+}
+
+.dishes h2 {
+    color: #ff4d1a;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.dish-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.dish-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.dish-card img {
+    width: 100%;
+    border-radius: 8px;
+    height: 180px;
+    object-fit: cover;
+}
+
+.dish-card h3 {
+    margin: 15px 0 10px;
+    color: #333;
+}
+
+.dish-card p {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.order-btn {
+    background-color: #ff4d1a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.order-btn:hover {
+    background-color: #e04317;
+}
+
+.dish-card:hover {
+    transform: scale(1.05);
+}
+/* Header Layout */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;  /* Reduce this as needed */
+  background-color: white;
+}
+
+/* Logo Styling */
+.logo {
+  display: flex;
+  align-items: center;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.logo img {
+  height: 50px;  /* Smaller logo */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Nav Styling */

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="allinone.css">
+    <link rel="stylesheet" href="buy.css">
+
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff3e0;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #ff5722;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #ff7043;
+            display: flex;
+            justify-content: center;
+            padding: 12px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 25px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Title */
+        .container h2 {
+            color: #e64a19;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        /* Orders Table */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .orders-table th {
+            background-color: #ffcc80;
+            color: #333;
+        }
+
+        .orders-table tr:nth-child(odd) {
+            background-color: #fff3e0;
+        }
+
+        .orders-table tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        /* Status Badges */
+        .order-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .delivered {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .pending {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .cancelled {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* View Button */
+        .view-btn {
+            background-color: #ff7043;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .view-btn:hover {
+            background-color: #e64a19;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ff5722;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-top">
+            <h1>Welcome to TasteFully Yours</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="food.html">Home</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="orders.html">Orders</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="login.html">Login</a></li>
+
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Your cart</h2>
+        <table class="orders-table">
+            <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+
+                <th>Delete</th>
+            </tr>
+
+        </table>
+
+        <!-- Confirmation Buttons -->
+        <div id="confirmation">
+            <div style="margin-bottom: 16px;">Are you sure you want to place this order?</div>
+            <button class="btn" id="confirm-order">Yes, Place Order</button>
+            <button class="btn" onclick="window.location.href='food.html'">No, Go Back</button>
+        </div>
+        <div id="order-message" class="message" style="display:none;">
+            🎉 Your order has been placed successfully!
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <h3>Tastefully Yours</h3>
+                <p>Deliciously crafted meals delivered to your door.</p>
+                <p>&copy; 2025 Tastefully Yours. All rights reserved.</p>
+            </div>
+            <div class="footer-right">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script>
+    document.getElementById("confirm-order").addEventListener("click", function () {
+        document.getElementById("order-message").style.display = "block";
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        localStorage.setItem("cart", JSON.stringify([]));
+        let orders = JSON.parse(localStorage.getItem("orders")) || [];
+        localStorage.setItem("orders", JSON.stringify([...orders, ...cart]));
+        setTimeout(() => {
+            window.location.href = "confirm.html";
+        }, 2000);
+    });
+
+    function loadOrders() {
+        let orders = JSON.parse(localStorage.getItem("cart")) || [];
+        let list = document.querySelector(".orders-table");
+        if (orders.length === 0) {
+            list.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No orders found.</td></tr>";
+        } else {
+            list.innerHTML = `<tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Delete</th>
+            </tr>`;
+            orders.forEach((item, index) => {
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.date}</td>
+                    <td>${item.name}</td>
+                    <td>₹${item.price}</td>
+                    <td><button class="btn delete-btn" onclick="deleteOrder(${index})">❌ Delete</button></td>
+                `;
+                list.appendChild(row);
+            });
+        }
+    }
+
+    function deleteOrder(index) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.splice(index, 1); // remove item by index
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadOrders(); // refresh list
+    }
+
+    document.addEventListener("DOMContentLoaded", loadOrders);
+</script>
+</body>
+</html>

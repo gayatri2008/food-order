@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Ordering Home</title>
+  <link rel="stylesheet" href="food.css">
+  <link rel="stylesheet" href="allinone.css">
+
+</head>
+
+<body>
+  <div class="offers">🔥 50% OFF on first order | Free Delivery above ₹299 🔥</div>
+
+  <header>
+    <script src="data.js"></script>
+    <nav>
+      <div class="logo">
+        <img src="Brown_and_White_SImple_Modern_Professional_Catering_Logo-removebg-preview.png"
+          style="width: 250px;height: 250px;margin-top: -121px;">
+      </div>
+      <ul>
+
+        <li><a href="food.html">Home</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="contact.html">Contact </a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="track.html">Track</a></li>
+        <input type="text" id="searchInput" placeholder="Search for dishes..." onkeyup="filterDishes()" />  
+
+      </ul>
+    </nav>
+            
+  </header>
+  <div class="slider">
+    <figure>
+      <div class="slide">
+        <img src="Red Yellow Creative Minimalist Restaurant Banner Horizontal.png" style="height: 600px;
+      width: 100%;
+     " alt="Yellow Noodles Promotion" />
+
+
+      </div>
+      <div class="slide">
+
+        <img src="Brown and Orange Vintage Modern Americana Restaurant and Food Banner (1).png" alt="" style="height: 600px;
+     
+      width: 100%;
+     ">
+      </div>
+ 
+      <div class="slide">
+        <img src="Black and Orange Burger Food YouTube Thumbnail.png" alt="" style="height: 600px;
+      width: 100%;
+      ">
+      </div>
+      <div class="slide">
+        <img src="Red Modern Today Special Food Menu Banner.png" alt="" style="height: 600px;
+      width: 100%;
+      ">
+      </div>
+      </div>
+
+    </figure>
+
+  </div>
+
+  <section class="hero">
+    <h1>Craving your favorites? Order Now 🍕🍔🥗</h1>
+  </section>
+  <div id="menu"></div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <h3>Tastefully Yours</h3>
+        <p>Deliciously crafted meals delivered to your door.</p>
+        <p>&copy; 2025 Tastefully Yours. All rights reserved.</p>
+      </div>
+      <div class="footer-right">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="food.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="orders.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Track nav clicks (including new 'Food' item)
+      const navItems = document.querySelectorAll('nav ul li a');
+
+      navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          console.log(`Navigation clicked: ${e.target.id} at ${new Date().toLocaleTimeString()}`);
+
+          // Track click count for each nav item
+          let clickCount = localStorage.getItem(e.target.id + '_clicks') || 0;
+          localStorage.setItem(e.target.id + '_clicks', ++clickCount);
+        });
+      });
+    });
+  </script>
+  <script src="foodProductData.js"></script>
+  <script>
+    const menuContainer = document.getElementById("menu");
+    const sections = {};
+    foodItems.forEach(item => {
+      if (!sections[item.section]) {
+        sections[item.section] = [];
+      }
+      sections[item.section].push(item);
+    });
+
+    Object.keys(sections).forEach(sectionName => {
+      const section = document.createElement("section");
+      section.className = "dishes";
+
+      // Section heading
+      const heading = document.createElement("h2");
+      heading.textContent = sectionName;
+      section.appendChild(heading);
+
+      // Dish container
+      const dishContainer = document.createElement("div");
+      dishContainer.className = "dish-container";
+
+      // Add dish cards
+      sections[sectionName].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "dish-card";
+        card.innerHTML = `
+          <img src="${item.img}" alt="${item.name}" loading="lazy" onerror="this.src='fallback.jpg'">
+          <h3>${item.name}</h3>
+          <p>₹${item.price}</p>
+          <button class="order-btn" onclick="window.location.href='buy.html?id=${item.id}'">Order Now</button>
+        `;
+        dishContainer.appendChild(card);
+      });
+
+      section.appendChild(dishContainer);
+      menuContainer.appendChild(section);
+    });
+  </script>
+  <script>
+    function filterDishes() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const dishCards = document.querySelectorAll(".dish-card");
+
+      dishCards.forEach(card => {
+        const name = card.querySelector("h3").textContent.toLowerCase();
+        if (name.includes(query)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }</script>
+    
+</body>
+</html>

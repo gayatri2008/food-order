@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order</title>
+  <link rel="stylesheet" href="allinone.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fff9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .tracking-section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .tracking-section h1 {
+      text-align: center;
+      font-size: 32px;
+      color: #2d6a4f;
+      margin-bottom: 10px;
+    }
+
+    .order-summary {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .order-summary h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .order-summary ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .order-summary li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      color: #555;
+    }
+
+    .timeline {
+      position: relative;
+      margin: 20px 0;
+      padding-left: 40px;
+      border-left: 3px solid #1b0a0a;
+    }
+
+    .timeline-step {
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .timeline-step::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      top: 5px;
+      width: 15px;
+      height: 15px;
+      background: #ccc;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+
+    .timeline-step.active::before {
+      background: #2d6a4f;
+        box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.2);
+
+    }
+
+    .timeline-step p {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .eta-box {
+      margin-top: 20px;
+      text-align: center;
+      background: #2d6a4f;
+      color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="offers">🔥 50% OFF on first order | Free Delivery above ₹299 🔥</div>
+
+  <header>
+    <nav>
+      <div class="logo">
+        <img src="Brown_and_White_SImple_Modern_Professional_Catering_Logo-removebg-preview.png"
+          style="width: 250px;height: 250px;margin-top: -121px;">
+      </div>
+      <ul>
+        <li><a href="food.html">Home</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="track.html">Track</a></li>
+        <input type="text" id="searchInput" placeholder="Search for dishes..." />
+      </ul>
+    </nav>
+  </header>
+
+  <section class="tracking-section">
+    <h1>Track Your Order</h1>
+
+    <div class="order-summary">
+      <h3>Your Order</h3>
+      <ul>
+        <li>🍕 Margherita Pizza - ₹249</li>
+        <li>🥤 Cold Coffee - ₹99</li>
+        <li>🍰 Chocolate Cake Slice - ₹149</li>
+      </ul>
+      <p><strong>Total: ₹497</strong></p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-step"><p>Order Placed ✅</p></div>
+      <div class="timeline-step"><p>Restaurant is preparing your food 🍳</p></div>
+      <div class="timeline-step"><p>Delivery partner is on the way 🚴</p></div>
+      <div class="timeline-step"><p>Delivered 🎉</p></div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="eta-box" id="eta">Estimated Delivery: 30 mins</div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <h3>Tastefully Yours</h3>
+        <p>Deliciously crafted meals delivered to your door.</p>
+        <p>&copy; 2025 Tastefully Yours. All rights reserved.</p>
+      </div>
+      <div class="footer-right">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="food.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="orders.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const steps = document.querySelectorAll(".timeline-step");
+    const etaBox = document.getElementById("eta");
+    let totalDistance = 0;
+    let remainingDistance = 0;
+
+    // Google Maps Smooth Movement with Route Polyline + Dynamic ETA + Timeline Sync
+    let map, riderMarker, customerMarker, routePolyline;
+    let riderPath = [
+      { lat: 28.6448, lng: 77.2167 }, // Start
+      { lat: 28.6470, lng: 77.2200 },
+      { lat: 28.6500, lng: 77.2230 },
+      { lat: 28.6520, lng: 77.2250 }, // Destination
+    ];
+    let stepIndex = 0;
+    let progress = 0;
+
+    function haversineDistance(coord1, coord2) {
+      const R = 6371;
+      const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
+      const dLng = (coord2.lng - coord1.lng) * Math.PI / 180;
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(coord1.lat * Math.PI / 180) *
+        Math.cos(coord2.lat * Math.PI / 180) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function calculateTotalDistance() {
+      totalDistance = 0;
+      for (let i = 0; i < riderPath.length - 1; i++) {
+        totalDistance += haversineDistance(riderPath[i], riderPath[i + 1]);
+      }
+      remainingDistance = totalDistance;
+    }
+
+    function initMap() {
+      calculateTotalDistance();
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: riderPath[0],
+        zoom: 14,
+      });
+
+      // Polyline for route
+      routePolyline = new google.maps.Polyline({
+        path: riderPath,
+        geodesic: true,
+        strokeColor: "#2d6a4f",
+        strokeOpacity: 0.8,
+        strokeWeight: 4,
+      });
+      routePolyline.setMap(map);
+
+      riderMarker = new google.maps.Marker({
+        position: riderPath[0],
+        map: map,
+        icon: "https://cdn-icons-png.flaticon.com/512/854/854878.png",
+        title: "Delivery Partner"
+      });
+
+      customerMarker = new google.maps.Marker({
+        position: riderPath[riderPath.length - 1],
+        map: map,
+        icon: "https://cdn-icons-png.flaticon.com/512/854/854894.png",
+        title: "Customer Location"
+      });
+
+      animateRider();
+    }
+
+    function animateRider() {
+      if (stepIndex >= riderPath.length - 1) {
+        steps.forEach(s => s.classList.remove("active"));
+        steps[steps.length - 1].classList.add("active");
+        etaBox.innerText = "Order Delivered 🎉";
+        return;
+      }
+
+      let start = riderPath[stepIndex];
+      let end = riderPath[stepIndex + 1];
+
+      let lat = start.lat + (end.lat - start.lat) * progress;
+      let lng = start.lng + (end.lng - start.lng) * progress;
+      riderMarker.setPosition({ lat, lng });
+      map.panTo({ lat, lng });
+
+      // Update distance & ETA
+      let segmentDist = haversineDistance(start, { lat, lng });
+      remainingDistance = totalDistance - (haversineDistance(riderPath[0], { lat, lng }));
+      let eta = Math.ceil((remainingDistance / totalDistance) * 30);
+      etaBox.innerText = `Estimated Delivery: ${eta} mins`;
+
+      // Timeline sync
+      let progressRatio = 1 - remainingDistance / totalDistance;
+      steps.forEach((s, i) => s.classList.remove("active"));
+      if (progressRatio < 0.25) {
+        steps[0].classList.add("active");
+      } else if (progressRatio < 0.5) {
+        steps[1].classList.add("active");
+      } else if (progressRatio < 0.9) {
+        steps[2].classList.add("active");
+      } else {
+        steps[3].classList.add("active");
+      }
+
+      progress += 0.002; // smoother movement
+
+      if (progress >= 1) {
+        progress = 0;
+        stepIndex++;
+      }
+
+      requestAnimationFrame(animateRider);
+    }
+  </script>
+</body>
+</html>
