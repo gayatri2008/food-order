@@ -1,317 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="allinone.css">
-    <link rel="stylesheet" href="buy.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff7f0;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h2 { margin-bottom: 20px; color: #ff7a00; }
-    .cart-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .item-info {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .item-info img {
-      width: 70px;
-      height: 70px;
-      border-radius: 12px;
-      object-fit: cover;
-    }
-    .item-title {
-      font-weight: 600;
-      font-size: 16px;
-    }
-    .item-price {
-      font-size: 14px;
-      color: #666;
-      margin-top: 4px;
-    }
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .quantity-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .quantity-controls button {
-      width: 32px;
-      height: 32px;
-      border: none;
-      border-radius: 6px;
-      background: #ff7a00;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .quantity-controls button:hover {
-      background: #e66b00;
-    }
-    .quantity-controls span {
-      min-width: 24px;
-      text-align: center;
-      font-weight: 600;
-      font-size: 16px;
-    }
-    .delete-btn {
-      background: #ff4d4d;
-      border: none;
-      border-radius: 6px;
-      width: 32px;
-      height: 32px;
-      cursor: pointer;
-      color: white;
-      font-size: 16px;
-    }
-    .delete-btn:hover {
-      background: #d93636;
-    }
-    .total {
-      margin-top: 20px;
-      text-align: right;
-      font-size: 18px;
-      font-weight: 700;
-    }
-  </style>
+    <link rel="stylesheet" href="allinone.css" />
+    <link rel="stylesheet" href="buy.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
     <style>
-        /* Reset & Base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background: #fff7f0;
+        margin: 0;
+        padding: 20px;
+      }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #fff3e0;
-            color: #333;
-        }
-
-        /* Header */
-        header {
-            background-color: #ff5722;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        /* Navigation Bar */
-        nav {
-            background-color: #ff7043;
-            display: flex;
-            justify-content: center;
-            padding: 12px 0;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 25px;
-            font-weight: 500;
-            font-size: 16px;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        /* Container */
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* Title */
-        .container h2 {
-            color: #e64a19;
-            font-size: 24px;
-            margin-bottom: 25px;
-        }
-
-        /* Orders Table */
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .orders-table th,
-        .orders-table td {
-            padding: 14px 18px;
-            text-align: left;
-            font-size: 15px;
-        }
-
-        .orders-table th {
-            background-color: #ffcc80;
-            color: #333;
-        }
-
-        .orders-table tr:nth-child(odd) {
-            background-color: #fff3e0;
-        }
-
-        .orders-table tr:nth-child(even) {
-            background-color: #ffffff;
-        }
-
-        /* Status Badges */
-        .order-status {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .delivered {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .pending {
-            background-color: #ffc107;
-            color: #333;
-        }
-
-        .cancelled {
-            background-color: #f44336;
-            color: white;
-        }
-
-        /* View Button */
-        .view-btn {
-            background-color: #ff7043;
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .view-btn:hover {
-            background-color: #e64a19;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #ff5722;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            margin-top: 40px;
-            font-size: 14px;
-        }
+      h2 {
+        margin-bottom: 20px;
+        color: #ff7a00;
+      }
+      .cart-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .item-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .item-info img {
+        width: 70px;
+        height: 70px;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+      .item-title {
+        font-weight: 600;
+        font-size: 16px;
+      }
+      .item-price {
+        font-size: 14px;
+        color: #666;
+        margin-top: 4px;
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .quantity-controls button {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 6px;
+        background: #ff7a00;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .quantity-controls button:hover {
+        background: #e66b00;
+      }
+      .quantity-controls span {
+        min-width: 24px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+      }
+      .delete-btn {
+        background: #ff4d4d;
+        border: none;
+        border-radius: 6px;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        color: white;
+        font-size: 16px;
+      }
+      .delete-btn:hover {
+        background: #d93636;
+      }
+      .total {
+        margin-top: 20px;
+        text-align: right;
+        font-size: 18px;
+        font-weight: 700;
+      }
     </style>
-</head>
+    <style>
+      /* Reset & Base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-<body>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #fff3e0;
+        color: #333;
+      }
+
+      /* Header */
+      header {
+        background-color: #ff5722;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      /* Navigation Bar */
+      nav {
+        background-color: #ff7043;
+        display: flex;
+        justify-content: center;
+        padding: 12px 0;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 25px;
+        font-weight: 500;
+        font-size: 16px;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      /* Container */
+      .container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        text-align: center;
+      }
+
+      /* Title */
+      .container h2 {
+        color: #e64a19;
+        font-size: 24px;
+        margin-bottom: 25px;
+      }
+
+      /* Orders Table */
+      .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .orders-table th,
+      .orders-table td {
+        padding: 14px 18px;
+        text-align: left;
+        font-size: 15px;
+      }
+
+      .orders-table th {
+        background-color: #ffcc80;
+        color: #333;
+      }
+
+      .orders-table tr:nth-child(odd) {
+        background-color: #fff3e0;
+      }
+
+      .orders-table tr:nth-child(even) {
+        background-color: #ffffff;
+      }
+
+      /* Status Badges */
+      .order-status {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .delivered {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .pending {
+        background-color: #ffc107;
+        color: #333;
+      }
+
+      .cancelled {
+        background-color: #f44336;
+        color: white;
+      }
+
+      /* View Button */
+      .view-btn {
+        background-color: #ff7043;
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .view-btn:hover {
+        background-color: #e64a19;
+      }
+
+      /* Footer */
+      footer {
+        background-color: #ff5722;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+        margin-top: 40px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
     <header>
-        <div class="header-top">
-            <h1>Welcome to TasteFully Yours</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="food.html">Home</a></li>
-                <li><a href="cart.html">Cart</a></li>
-                <li><a href="orders.html">Orders</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="login.html">Login</a></li>
-
-            </ul>
-        </nav>
+      <div class="header-top">
+        <h1>Welcome to TasteFully Yours</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="food.html">Home</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="orders.html">Orders</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </nav>
     </header>
     <div class="container">
-       
-  <div class="cart-container">
-    <h2>My Food Cart</h2>
-    <div id="cartItems"></div>
-    <div class="total">Total: ₹<span id="cartTotal">0</span></div>
-  </div>
-        <!-- Confirmation Buttons -->
-        <div id="confirmation">
-            <div style="margin-bottom: 16px;">Are you sure you want to place this order?</div>
-            <button class="btn" id="confirm-order">Yes, Place Order</button>
-            <button class="btn" onclick="window.location.href='food.html'">No, Go Back</button>
+      <div class="cart-container">
+        <h2>My Food Cart</h2>
+        <div id="cartItems"></div>
+        <div class="total">Total: ₹<span id="cartTotal">0</span></div>
+      </div>
+      <!-- Confirmation Buttons -->
+      <div id="confirmation">
+        <div style="margin-bottom: 16px">
+          Are you sure you want to place this order?
         </div>
-        <div id="order-message" class="message" style="display:none;">
-            🎉 Your order has been placed successfully!
-        </div>
+        <button class="btn" id="confirm-order">Yes, Place Order</button>
+        <button class="btn" onclick="window.location.href='food.html'">
+          No, Go Back
+        </button>
+      </div>
+      <div id="order-message" class="message" style="display: none">
+        🎉 Your order has been placed successfully!
+      </div>
     </div>
     <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-left">
-                <h3>Tastefully Yours</h3>
-                <p>Deliciously crafted meals delivered to your door.</p>
-                <p>&copy; 2025 Tastefully Yours. All rights reserved.</p>
-            </div>
-            <div class="footer-right">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="menu.html">Menu</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-            </div>
+      <div class="footer-container">
+        <div class="footer-left">
+          <h3>Tastefully Yours</h3>
+          <p>Deliciously crafted meals delivered to your door.</p>
+          <p>&copy; 2025 Tastefully Yours. All rights reserved.</p>
         </div>
+        <div class="footer-right">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
     </footer>
     <script>
-    document.getElementById("confirm-order").addEventListener("click", function () {
-        document.getElementById("order-message").style.display = "block";
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        localStorage.setItem("cart", JSON.stringify([]));
-        let orders = JSON.parse(localStorage.getItem("orders")) || [];
-        localStorage.setItem("orders", JSON.stringify([...orders, ...cart]));
-        setTimeout(() => {
+      document
+        .getElementById("confirm-order")
+        .addEventListener("click", function () {
+          document.getElementById("order-message").style.display = "block";
+
+          let cart = JSON.parse(localStorage.getItem("cart")) || [];
+          if (cart.length === 0) {
+            alert("Your cart is empty!");
+            return;
+          }
+
+          // Fetch existing orders
+          let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+          // Create new order object
+          let newOrder = {
+            id: Date.now().toString() + Math.floor(Math.random() * 1000), // unique id
+            date: new Date().toLocaleDateString(),
+            items: cart,
+          };
+
+          // Save updated orders
+          orders.push(newOrder);
+          localStorage.setItem("orders", JSON.stringify(orders));
+
+          // Clear cart
+          localStorage.setItem("cart", JSON.stringify([]));
+
+          // Redirect after showing message
+          setTimeout(() => {
             window.location.href = "confirm.html";
-        }, 2000);
-    });
+          }, 2000);
+        });
+    </script>
+    <script>
+      function loadCart() {
+        let orders = JSON.parse(localStorage.getItem("cart")) || [];
+        let cartDiv = document.getElementById("cartItems");
+        cartDiv.innerHTML = "";
 
+        orders.forEach((item, index) => {
+          // Ensure quantity field exists
+          if (!item.quantity) item.quantity = 1;
 
-</script>  <script>
-    function loadCart() {
-      let orders = JSON.parse(localStorage.getItem('cart')) || [];
-      let cartDiv = document.getElementById('cartItems');
-      cartDiv.innerHTML = "";
+          let div = document.createElement("div");
+          div.className = "cart-item";
+          div.setAttribute("data-index", index);
+          div.setAttribute("data-price", item.price);
 
-      orders.forEach((item, index) => {
-        // Ensure quantity field exists
-        if (!item.quantity) item.quantity = 1;
-
-        let div = document.createElement('div');
-        div.className = "cart-item";
-        div.setAttribute("data-index", index);
-        div.setAttribute("data-price", item.price);
-
-        div.innerHTML = `
+          div.innerHTML = `
           <div class="item-info">
             <img src="${item.image}" alt="${item.name}">
             <div>
@@ -324,62 +353,76 @@
             <span class="quantity">${item.quantity}</span>
             <button class="increase"><i class="fa fa-plus"></i></button>
           </div>
+              <button class="delete-btn"><i class="fa fa-trash"></i></button>
+
         `;
-        cartDiv.appendChild(div);
-      });
-      updateTotal();
-      attachEvents();
-    }
+          cartDiv.appendChild(div);
+        });
+        updateTotal();
+        attachEvents();
+      }
 
-    function updateTotal() {
-      let total = 0;
-      document.querySelectorAll('.cart-item').forEach(item => {
-        const price = parseInt(item.getAttribute('data-price'));
-        const qty = parseInt(item.querySelector('.quantity').textContent);
-        total += price * qty;
-      });
-      document.getElementById('cartTotal').textContent = total;
-    }
+      function updateTotal() {
+        let total = 0;
+        document.querySelectorAll(".cart-item").forEach((item) => {
+          const price = parseInt(item.getAttribute("data-price"));
+          const qty = parseInt(item.querySelector(".quantity").textContent);
+          total += price * qty;
+        });
+        document.getElementById("cartTotal").textContent = total;
+      }
 
-    function attachEvents() {
-      document.querySelectorAll('.increase').forEach(btn => {
-        btn.onclick = function() {
-          const itemDiv = this.closest('.cart-item');
-          const qtyEl = itemDiv.querySelector('.quantity');
-          qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
-          saveQuantities();
-          updateTotal();
-        };
-      });
-
-      document.querySelectorAll('.decrease').forEach(btn => {
-        btn.onclick = function() {
-          const itemDiv = this.closest('.cart-item');
-          const qtyEl = itemDiv.querySelector('.quantity');
-          let qty = parseInt(qtyEl.textContent);
-          if(qty > 1) {
-            qtyEl.textContent = qty - 1;
+      function attachEvents() {
+        document.querySelectorAll(".increase").forEach((btn) => {
+          btn.onclick = function () {
+            const itemDiv = this.closest(".cart-item");
+            const qtyEl = itemDiv.querySelector(".quantity");
+            qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
             saveQuantities();
             updateTotal();
+          };
+        });
+
+        document.querySelectorAll(".decrease").forEach((btn) => {
+          btn.onclick = function () {
+            const itemDiv = this.closest(".cart-item");
+            const qtyEl = itemDiv.querySelector(".quantity");
+            let qty = parseInt(qtyEl.textContent);
+            if (qty > 1) {
+              qtyEl.textContent = qty - 1;
+              saveQuantities();
+              updateTotal();
+            }
+          };
+        });
+      }
+
+      function saveQuantities() {
+        let orders = JSON.parse(localStorage.getItem("cart")) || [];
+        document.querySelectorAll(".cart-item").forEach((itemDiv) => {
+          const index = itemDiv.getAttribute("data-index");
+          const qty = parseInt(itemDiv.querySelector(".quantity").textContent);
+          if (orders[index]) {
+            orders[index].quantity = qty;
           }
+        });
+        localStorage.setItem("cart", JSON.stringify(orders));
+      }
+
+      // Load cart on page start
+      loadCart();
+      document.querySelectorAll(".delete-btn").forEach((btn) => {
+        btn.onclick = function () {
+          const itemDiv = this.closest(".cart-item");
+          const index = itemDiv.getAttribute("data-index");
+
+          let cart = JSON.parse(localStorage.getItem("cart")) || [];
+          cart.splice(index, 1); // remove item by index
+          localStorage.setItem("cart", JSON.stringify(cart));
+
+          loadCart(); // refresh UI
         };
       });
-    }
-
-    function saveQuantities() {
-      let orders = JSON.parse(localStorage.getItem('cart')) || [];
-      document.querySelectorAll('.cart-item').forEach(itemDiv => {
-        const index = itemDiv.getAttribute('data-index');
-        const qty = parseInt(itemDiv.querySelector('.quantity').textContent);
-        if (orders[index]) {
-          orders[index].quantity = qty;
-        }
-      });
-      localStorage.setItem('orders', JSON.stringify(orders));
-    }
-
-    // Load cart on page start
-    loadCart();
-  </script>
-</body>
+    </script>
+  </body>
 </html>

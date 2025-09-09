@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fffaf3;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #ff5722, #ff9800);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 20px; margin: 0; }
+    nav ul { display: flex; list-style: none; margin: 0; padding: 0; gap: 20px; }
+    nav a { color: #fff; text-decoration: none; font-weight: 500; }
+    nav a:hover { text-decoration: underline; }
+
+    .profile-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+    .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
+    .avatar {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: #ffe0b2; display: flex; align-items: center; justify-content: center;
+      font-size: 36px; color: #ff5722; font-weight: bold;
+    }
+    .profile-header h2 { margin: 0; font-size: 24px; }
+    .profile-header p { margin: 5px 0 0; color: #777; }
+
+    .profile-details { margin-top: 20px; }
+    .detail-item {
+      display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0;
+    }
+    .detail-item:last-child { border-bottom: none; }
+    .detail-item i { color: #ff7043; font-size: 18px; margin-right: 15px; width: 20px; text-align: center; }
+    .detail-item span { font-size: 15px; color: #555; }
+    .detail-item strong { display: block; color: #222; font-size: 16px; }
+
+    @media (max-width:600px) {
+      .profile-header { flex-direction: column; align-items: center; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>TasteFully Yours</h1>
+    <nav>
+      <ul>
+        <li><a href="food.html">Home</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="track.html">Track</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="avatar" id="avatar">U</div>
+      <div>
+        <h2 id="userName">User Name</h2>
+        <p id="userEmail">user@email.com</p>
+      </div>
+    </div>
+
+    <div class="profile-details">
+      <div class="detail-item">
+        <i class="fa-solid fa-phone"></i>
+        <div>
+          <strong id="userPhone">+91 0000000000</strong>
+          <span>Phone</span>
+        </div>
+      </div>
+      <div class="detail-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <div>
+          <strong id="userLocation">Fetching location...</strong>
+          <span>Location</span>
+        </div>
+      </div>
+      <div class="detail-item">
+        <i class="fa-solid fa-cake-candles"></i>
+        <div>
+          <strong id="userDob">01 Jan 1990</strong>
+          <span>Date of Birth</span>
+        </div>
+      </div>
+      <div class="detail-item">
+        <i class="fa-solid fa-id-card"></i>
+        <div>
+          <strong id="userId">123456</strong>
+          <span>User ID</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load dummy user data (simulate login info from localStorage)
+    let user = JSON.parse(localStorage.getItem("user")) || {
+      name: "Omkar Gadekar",
+      email: "omkar@example.com",
+      phone: "+91 9876543210",
+      dob: "15 Aug 1995",
+      id: "USR2025"
+    };
+
+    document.getElementById("userName").textContent = user.name;
+    document.getElementById("userEmail").textContent = user.email;
+    document.getElementById("userPhone").textContent = user.phone;
+    document.getElementById("userDob").textContent = user.dob;
+    document.getElementById("userId").textContent = user.id;
+    document.getElementById("avatar").textContent = user.name[0].toUpperCase();
+
+    // Get current location using Geolocation API
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+      document.getElementById("userLocation").textContent = "Geolocation not supported";
+    }
+
+    function success(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      // Fetch readable address using OpenStreetMap Nominatim API
+      fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+        .then(res => res.json())
+        .then(data => {
+          const address = data.display_name || `${lat}, ${lon}`;
+          document.getElementById("userLocation").textContent = address;
+        })
+        .catch(() => {
+          document.getElementById("userLocation").textContent = `${lat}, ${lon}`;
+        });
+    }
+
+    function error(err) {
+      document.getElementById("userLocation").textContent = "Location access denied";
+    }
+  </script>
+</body>
+</html>

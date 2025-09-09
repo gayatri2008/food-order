@@ -139,23 +139,35 @@
         </div>
     </footer>
 
-    <script>
-        document.getElementById("login-form").addEventListener("submit", function (event) {
-            event.preventDefault(); // stop form reload
+   <script>
+  document.getElementById("login-form").addEventListener("submit", function (event) {
+    event.preventDefault(); // stop form reload
 
-            const username = document.getElementById("username").value.trim();
-            const password = document.getElementById("password").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-            // For demo: accept any non-empty login
-            if (username && password) {
-                localStorage.setItem("isLoggedIn", "true");
-                alert("✅ Login successful!");
-                window.location.href = "food.html"; // redirect
-            } else {
-                alert("❌ Please enter username and password.");
-            }
-        });
-    </script>
+    // For demo: accept any non-empty login
+    if (username && password) {
+      // Create user object
+      const user = {
+        name: username,
+        email: username + "@example.com", // just dummy for now
+        phone: "+91 9876543210",
+        dob: "01 Jan 1990",
+        id: "USR" + Date.now() // unique user id
+      };
+
+      // Save in localStorage
+      localStorage.setItem("user", JSON.stringify(user));
+
+      alert("✅ Login successful!");
+      window.location.href = "food.html"; // redirect after login
+    } else {
+      alert("❌ Please enter username and password.");
+    }
+  });
+</script>
+
 </body>
 
 </html>

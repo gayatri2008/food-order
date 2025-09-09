@@ -20,15 +20,13 @@
         <img src="Brown_and_White_SImple_Modern_Professional_Catering_Logo-removebg-preview.png"
           style="width: 250px;height: 250px;margin-top: -121px;">
       </div>
-      <ul>
+      <ul id="navLinks">
+        <input type="text" id="searchInput" placeholder="Search for dishes..." onkeyup="filterDishes()" />  
 
         <li><a href="food.html">Home</a></li>
         <li><a href="orders.html">Orders</a></li>
-        <li><a href="contact.html">Contact </a></li>
         <li><a href="cart.html">Cart</a></li>
-        <li><a href="login.html">Login</a></li>
         <li><a href="track.html">Track</a></li>
-        <input type="text" id="searchInput" placeholder="Search for dishes..." onkeyup="filterDishes()" />  
 
       </ul>
     </nav>
@@ -83,7 +81,6 @@
         <h4>Quick Links</h4>
         <ul>
           <li><a href="food.html">Home</a></li>
-          <li><a href="menu.html">Menu</a></li>
           <li><a href="orders.html">About Us</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -163,6 +160,24 @@
         }
       });
     }</script>
+
+    <script>
+  // Check if user data exists
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navLinks = document.getElementById("navLinks");
+
+  if (user) {
+    // User logged in → Show Profile
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="profile.html">Profile</a>`;
+    navLinks.appendChild(li);
+  } else {
+    // No user → Show Login
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="login.html">Login</a>`;
+    navLinks.appendChild(li);
+  }
+</script>
     
 </body>
 </html>

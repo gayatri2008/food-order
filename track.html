@@ -294,11 +294,6 @@
           <li><a href="cart.html">Cart</a></li>
           <li><a href="login.html">Login</a></li>
           <li><a href="track.html">Track</a></li>
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search for dishes..."
-          />
         </ul>
       </nav>
     </header>
@@ -308,7 +303,7 @@
         <header>
           <div class="brand-badge">FO</div>
           <div>
-            <h1>Order #<span id="orderId">FD-100234</span></h1>
+            <h1>Order #<span id="orderId">--</span></h1>
             <p class="lead">
               Delivery estimate: <strong id="eta">--</strong> •
               <span id="customerName">You</span>
@@ -341,7 +336,7 @@
 
         <div class="meta">
           <div class="pill" id="statusPill">
-            Status: <strong id="statusText">Order Received</strong>
+            Status: <strong id="statusText">--</strong>
           </div>
           <div id="statusTime" style="font-size: 13px; color: #666">
             Updated: --
@@ -500,16 +495,55 @@
         const statusText = document.getElementById("statusText");
         const statusTime = document.getElementById("statusTime");
         const orderItemsDiv = document.getElementById("orderItems");
+        const orderIdSpan = document.getElementById("orderId");
+
         let current = 0;
+        let intervalId = null;
+
+        function statusToIndex(status) {
+          switch (status) {
+            case "Order Received":
+              return 0;
+            case "Preparing":
+              return 1;
+            case "Out for Delivery":
+              return 2;
+            case "On The Way":
+              return 3;
+            case "Delivered":
+              return 4;
+            default:
+              return 0;
+          }
+        }
 
         function loadOrder() {
           const data = JSON.parse(localStorage.getItem("orders")) || [];
           orderItemsDiv.innerHTML = "";
-          data.forEach((item) => {
+
+          if (data.length === 0) {
+            orderItemsDiv.textContent = "No recent orders found.";
+            return;
+          }
+
+          const recentOrder = data[data.length - 1];
+          orderIdSpan.textContent = recentOrder.id;
+
+          // restore status from saved order
+          if (recentOrder.status) {
+            current = statusToIndex(recentOrder.status);
+          }
+
+          recentOrder.items.forEach((product) => {
             const div = document.createElement("p");
-            div.textContent = `${item.name} • ₹${item.price} • ${item.date}`;
+            div.textContent = `${product.name} • ₹${product.price} × ${product.quantity}`;
             orderItemsDiv.appendChild(div);
           });
+
+          const dateDiv = document.createElement("p");
+          dateDiv.style.fontWeight = "bold";
+          dateDiv.textContent = `Order Date: ${recentOrder.date}`;
+          orderItemsDiv.appendChild(dateDiv);
         }
 
         function render() {
@@ -518,9 +552,7 @@
             if (i < current) el.classList.add("done");
             if (i === current) el.classList.add("active");
           });
-          const labels = steps.map(
-            (s) => s.querySelector(".label").textContent
-          );
+          const labels = steps.map((s) => s.querySelector(".label").textContent);
           statusText.textContent = labels[current] || "Unknown";
           statusTime.textContent =
             "Updated: " + new Date().toLocaleTimeString();
@@ -529,16 +561,30 @@
         function goTo(i) {
           current = Math.max(0, Math.min(i, steps.length - 1));
           render();
-        }
 
-        setInterval(() => {
-          if (current < steps.length - 1) {
-            goTo(current + 1);
+          // save status to latest order
+          let orders = JSON.parse(localStorage.getItem("orders")) || [];
+          if (orders.length > 0) {
+            orders[orders.length - 1].status =
+              steps[current].querySelector(".label").textContent;
+            localStorage.setItem("orders", JSON.stringify(orders));
           }
-        }, 5000);
+
+          if (current === steps.length - 1) {
+            clearInterval(intervalId); // stop auto-increment if delivered
+          }
+        }
 
         loadOrder();
         render();
+
+        if (current < steps.length - 1) {
+          intervalId = setInterval(() => {
+            if (current < steps.length - 1) {
+              goTo(current + 1);
+            }
+          }, 5000);
+        }
       })();
     </script>
   </body>

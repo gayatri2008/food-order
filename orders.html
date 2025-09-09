@@ -4,24 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="allinone.css">
-
+  <title>Your Orders</title>
   <style>
-    /* Reset & Base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #fff3e0;
       color: #333;
+      margin: 0;
+      padding: 0;
     }
 
-    /* Header */
     header {
       background-color: #ff5722;
       color: white;
@@ -31,7 +23,6 @@
       font-weight: bold;
     }
 
-    /* Navigation Bar */
     nav {
       background-color: #ff7043;
       display: flex;
@@ -42,7 +33,7 @@
     nav a {
       color: white;
       text-decoration: none;
-      margin: 0 25px;
+      margin: 0 20px;
       font-weight: 500;
       font-size: 16px;
     }
@@ -51,22 +42,21 @@
       text-decoration: underline;
     }
 
-    /* Container */
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 30px auto;
       padding: 20px;
-      text-align: center;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
 
-    /* Title */
-    .container h2 {
+    h2 {
       color: #e64a19;
-      font-size: 24px;
+      text-align: center;
       margin-bottom: 25px;
     }
 
-    /* Orders Table */
     .orders-table {
       width: 100%;
       border-collapse: collapse;
@@ -79,6 +69,7 @@
       padding: 14px 18px;
       text-align: left;
       font-size: 15px;
+      border-bottom: 1px solid #eee;
     }
 
     .orders-table th {
@@ -87,14 +78,13 @@
     }
 
     .orders-table tr:nth-child(odd) {
-      background-color: #fff3e0;
+      background-color: #fff8f2;
     }
 
     .orders-table tr:nth-child(even) {
       background-color: #ffffff;
     }
 
-    /* Status Badges */
     .order-status {
       padding: 6px 14px;
       border-radius: 20px;
@@ -108,19 +98,8 @@
       color: white;
     }
 
-    .pending {
-      background-color: #ffc107;
-      color: #333;
-    }
-
-    .cancelled {
-      background-color: #f44336;
-      color: white;
-    }
-
-    /* View Button */
-    .view-btn {
-      background-color: #ff7043;
+    .view-btn,
+    .delete-btn {
       border: none;
       color: white;
       padding: 6px 12px;
@@ -129,116 +108,115 @@
       font-weight: 500;
     }
 
+    .view-btn {
+      background-color: #ff7043;
+    }
+
     .view-btn:hover {
       background-color: #e64a19;
     }
 
-    /* Footer */
-    footer {
-      background-color: #ff5722;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-      margin-top: 40px;
+    .delete-btn {
+      background-color: #f44336;
+    }
+
+    .delete-btn:hover {
+      background-color: #d32f2f;
+    }
+
+    .details {
+      display: none;
+      background: #fff7f0;
+    }
+
+    .details td {
       font-size: 14px;
+      padding-left: 40px;
     }
   </style>
 </head>
 
 <body>
   <header>
-    <div class="header-top">
-      <h1>Welcome to TasteFully Yours</h1>
-    </div>
+    <h1>Welcome to TasteFully Yours</h1>
     <nav>
-      <ul>
-        <li><a href="food.html">Home</a></li>
-        <li><a href="cart.html">Cart</a></li>
-        <li><a href="orders.html">Orders</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="track.html">Track</a></li>
-        <li><a href="login.html">Login</a></li>
-
-      </ul>
+      <a href="food.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="orders.html">Orders</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="login.html">Login</a>
     </nav>
   </header>
+
   <div class="container">
     <h2>Your Orders</h2>
-    <table class="orders-table">
-      <tr>
-        <th>Order #</th>
-        <th>Date</th>
-        <th>Items</th>
-        <th>Total</th>
-        <th>Status</th>
-        <th>Action</th>
-        <th>Delete</th>
-      </tr>
-     
+    <table class="orders-table" id="ordersTable">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="ordersBody"></tbody>
     </table>
-
   </div>
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-left">
-        <h3>Tastefully Yours</h3>
-        <p>Deliciously crafted meals delivered to your door.</p>
-        <p>&copy; 2025 Tastefully Yours. All rights reserved.</p>
-      </div>
-      <div class="footer-right">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="menu.html">Menu</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-    </div>
+
+  <footer>
+    <p>&copy; 2025 Tastefully Yours. All rights reserved.</p>
   </footer>
+
   <script>
     function loadOrders() {
-      // let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      // localStorage.setItem("cart", JSON.stringify([]));
       let orders = JSON.parse(localStorage.getItem("orders")) || [];
-      // localStorage.setItem("orders", JSON.stringify([...orders, ...cart]));
+      let tbody = document.getElementById("ordersBody");
+      tbody.innerHTML = "";
 
-      let list = document.querySelector(".orders-table");
       if (orders.length === 0) {
-        list.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No orders found.</td></tr>";
-      } else {
-        list.innerHTML = `   <tr>
-        <th>Order #</th>
-        <th>Date</th>
-        <th>Items</th>
-        <th>Total</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>`
-
-        orders.forEach((item, index) => {
-          let row = document.createElement("tr");
-          row.innerHTML = `
-          <td>${item.id}</td>
-          <td>${item.date}</td>
-          <td>${item.name}</td>
-          <td>₹${item.price}</td>
-          <td><span class="order-status delivered">Delivered</span></td>
-          <td><a class="view-btn" href="buy.html?id=${item.id}">View</a></td>
-        `;
-          list.appendChild(row);
-        });
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No orders found.</td></tr>`;
+        return;
       }
+
+      // latest orders first
+      orders.slice().reverse().forEach((order, idx) => {
+        // calculate total
+        let total = order.items.reduce((sum, it) => sum + (it.price * (it.quantity || 1)), 0);
+
+        // summary row
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${order.id}</td>
+          <td>${order.date}</td>
+          <td>₹${total}</td>
+          <td><span class="order-status delivered">Order Received</span></td>
+          <td><button class="view-btn" onclick="toggleDetails(${idx})">View Details</button></td>
+        `;
+        tbody.appendChild(row);
+
+        // detail rows
+        order.items.forEach(item => {
+          let detailRow = document.createElement("tr");
+          detailRow.className = "details details-" + idx;
+          detailRow.innerHTML = `
+            <td colspan="6">
+              ${item.name} x${item.quantity || 1} — ₹${item.price * (item.quantity || 1)}
+            </td>
+          `;
+          tbody.appendChild(detailRow);
+        });
+      });
     }
 
-    function deleteOrder(index) {
-      let orders = JSON.parse(localStorage.getItem("orders")) || [];
-      orders.splice(index, 1); // remove item by index
-      console.log(orders)
-
-      localStorage.setItem("orders", JSON.stringify(orders));
-      loadOrders(); // refresh list
+    function toggleDetails(idx) {
+      document.querySelectorAll(`.details-${idx}`).forEach(row => {
+        row.style.display = row.style.display === "table-row" ? "none" : "table-row";
+      });
     }
+
+
+
     document.addEventListener("DOMContentLoaded", loadOrders);
 
   </script>
